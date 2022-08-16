@@ -1,8 +1,7 @@
-import { IUserInfo, IUserInfoResponse } from '../../types/user';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import $api from '../../api/api';
 import {
-  API_ABOUT_ROUTE,
+
   API_AUTH_ROUTE,
   API_REGISTER_ROUTE,
   JWT,

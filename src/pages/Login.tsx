@@ -6,7 +6,6 @@ import BtnForm from '../components/BtnForm';
 import { STYLE_FORM, STYLE_HEADER_FORM } from '../utils/constants';
 import { Link } from 'react-router-dom';
 import { RoutesNames } from '../utils/routes';
-
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../utils/schema';
 import { IFormAuthValues } from '../types/auth';
