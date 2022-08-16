@@ -1,21 +1,26 @@
 import { Button, Card, TextField, Typography } from '@mui/material';
 import { FC, useState } from 'react';
-import { CenteredContainer } from './CenteredContainer';
+import { CenteredContainer } from '../components/CenteredContainer';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  API_REGISTER_ROUTE,
-  STYLE_FORM,
-  STYLE_HEADER_FORM,
-} from '../utils/constants';
-import { Link } from 'react-router-dom';
+import { STYLE_FORM, STYLE_HEADER_FORM } from '../utils/constants';
+import { Link, useNavigate } from 'react-router-dom';
 import { RoutesNames } from '../utils/routes';
 import schema from '../utils/schema';
-import $api from '../api/api';
-import { IFormAuthValues } from '../types/user';
-import BtnForm from './BtnForm';
+
+import BtnForm from '../components/BtnForm';
+import { IFormAuthValues } from '../types/auth';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { postRegister } from '../redux/slices/authSlice';
+import AlertMessage from '../components/AlertMessage';
+import { useAppSelector } from '../hooks/useAppSelector';
 
 const Register: FC = () => {
+  const dispatch = useAppDispatch();
+  const { statusAuth } = useAppSelector((state) => state.authReducer);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -25,16 +30,22 @@ const Register: FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleSubmitRegister: SubmitHandler<IFormAuthValues> = async (data) => {
-    const { username, password } = data;
-    try {
-      const res = await $api.post(API_REGISTER_ROUTE, {
-        username,
-        password,
+  const handleSubmitRegister: SubmitHandler<IFormAuthValues> = (data) => {
+    dispatch(postRegister(data))
+      .unwrap()
+      .then(() => {
+        setIsOpen(true);
+        setTimeout(() => {
+          navigate(RoutesNames.LOGIN);
+          setIsOpen(false);
+        }, 2000);
+      })
+      .catch(() => {
+        setIsOpen(true);
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 2000);
       });
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -58,7 +69,6 @@ const Register: FC = () => {
                 type='text'
                 fullWidth
                 name='username'
-                /* error={errors['email']} */
                 sx={{ marginBottom: '20px' }}
                 label='имя пользователя'
               />
@@ -93,7 +103,6 @@ const Register: FC = () => {
                 sx={{ marginBottom: '20px' }}
                 type='password'
                 name='password'
-                /*     error={errors['password']} */
                 fullWidth
                 label='пароль'
               />
@@ -126,6 +135,7 @@ const Register: FC = () => {
           text='Зарегистрироваться'
         />
       </Card>
+      <AlertMessage isOpen={isOpen} status={statusAuth} />
     </CenteredContainer>
   );
 };

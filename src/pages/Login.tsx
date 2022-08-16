@@ -1,22 +1,26 @@
 import { Button, Card, TextField, Typography } from '@mui/material';
-import { FC } from 'react';
-import { CenteredContainer } from './CenteredContainer';
+import { FC, useState } from 'react';
+import { CenteredContainer } from '../components/CenteredContainer';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import BtnForm from './BtnForm';
-import {
-  API_AUTH_ROUTE,
-  JWT,
-  STYLE_FORM,
-  STYLE_HEADER_FORM,
-} from '../utils/constants';
+import BtnForm from '../components/BtnForm';
+import { STYLE_FORM, STYLE_HEADER_FORM } from '../utils/constants';
 import { Link } from 'react-router-dom';
 import { RoutesNames } from '../utils/routes';
-import $api from '../api/api';
-import { IFormAuthValues, UserResponse } from '../types/user';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../utils/schema';
+import { IFormAuthValues } from '../types/auth';
+import { postLogin } from '../redux/slices/authSlice';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import AlertMessage from '../components/AlertMessage';
+import { useAppSelector } from '../hooks/useAppSelector';
 
 const Login: FC = () => {
+
+  const dispatch = useAppDispatch();
+  const { statusAuth } = useAppSelector((state) => state.authReducer);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const {
     control,
     handleSubmit,
@@ -26,18 +30,15 @@ const Login: FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleSubmitAuth: SubmitHandler<IFormAuthValues> = async (data) => {
-    const { username, password } = data;
-    try {
-      const res = await $api.post<UserResponse>(API_AUTH_ROUTE, {
-        username,
-        password,
-      });
-      const token = res.data.token;
-      localStorage.setItem(JWT, token);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleSubmitAuth: SubmitHandler<IFormAuthValues> = (data) => {
+
+    dispatch(postLogin(data));
+    setIsOpen(true);
+
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2500);
+
   };
 
   return (
@@ -64,7 +65,6 @@ const Login: FC = () => {
                 type='text'
                 fullWidth
                 name='username'
-                /* error={errors['email']} */
                 sx={{ marginBottom: '20px' }}
                 label='имя пользователя'
               />
@@ -99,8 +99,7 @@ const Login: FC = () => {
                 sx={{ marginBottom: '30px' }}
                 name='password'
                 type={'password'}
-                /*                 error={errors['password']}
-                 */ fullWidth
+                fullWidth
                 label='пароль'
               />
 
@@ -128,6 +127,7 @@ const Login: FC = () => {
         </Button>
         <BtnForm isDirty={isDirty} isValid={isValid} text='войти' />
       </Card>
+      <AlertMessage isOpen={isOpen} status={statusAuth} />
     </CenteredContainer>
   );
 };

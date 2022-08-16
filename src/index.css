@@ -1,4 +1,2 @@
-.link{
-  text-decoration: none;
-  color: black;
-}
+@import url(./assets/normalize.css);
+@import url(./assets/link.css);

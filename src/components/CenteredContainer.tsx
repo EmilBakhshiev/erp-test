@@ -4,8 +4,7 @@ import { Box } from '@mui/material';
 
 export const CenteredContainer = styled(Box)({
   display: 'flex',
-  height: '100vh',
-  flexDirection: 'column',
+  height: '80vh',
   alignItems: 'center',
   justifyContent: 'center',
 });

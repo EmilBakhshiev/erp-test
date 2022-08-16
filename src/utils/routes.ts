@@ -1,7 +1,7 @@
 import { ComponentType } from "react";
-import Login from "../components/Login";
-import MainPage from "../components/MainPage";
-import Register from "../components/Register";
+import Login from "../pages/Login";
+import MainPage from "../pages/MainPage";
+import Register from "../pages/Register";
 
 
 export interface IRoute {
@@ -13,12 +13,10 @@ export interface IRoute {
     MAIN_PAGE = '/',
     LOGIN = '/login',
     REGISTER = '/register',
-    NOT_FOUND = '*',
   }
 
   export const publicRoutes: IRoute[] = [
     { path: RoutesNames.LOGIN, component: Login },
-    /* { path: RoutesNames.NOT_FOUND, component: NotFound }, */
     { path: RoutesNames.REGISTER, component: Register },
   ];
   

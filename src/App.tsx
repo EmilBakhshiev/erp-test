@@ -1,14 +1,17 @@
-import { FC, useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import { FC, useEffect } from 'react';
 import AppRouter from './components/AppRouter';
+import { useAppDispatch } from './hooks/useAppDispatch';
+import { setIsAuth } from './redux/slices/authSlice';
 import { JWT } from './utils/constants';
 
 const App: FC = () => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const checkToken = () => {
     const token = localStorage.getItem(JWT);
     if (token) {
-      setIsAuth(true);
+      dispatch(setIsAuth(true));
     }
   };
 
@@ -17,9 +20,13 @@ const App: FC = () => {
   }, []);
 
   return (
-    <div>
-      <AppRouter isAuth={isAuth} />
-    </div>
+    <Box
+      sx={{
+        minHeight: '100vh',
+      }}
+    >
+      <AppRouter />
+    </Box>
   );
 };
 

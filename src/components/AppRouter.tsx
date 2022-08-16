@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-/* import { useAppSelector } from '../hooks/useAppSelector';
- */ import { privateRoutes, publicRoutes, RoutesNames } from '../utils/routes';
+import { useAppSelector } from '../hooks/useAppSelector';
+import { privateRoutes, publicRoutes, RoutesNames } from '../utils/routes';
 
-type AppRouterProps = {
-  isAuth: boolean;
-  setIsAuth?: (isAuth: boolean) => void;
-};
 
-const AppRouter: FC<AppRouterProps> = ({ isAuth,setIsAuth }) => {
+
+const AppRouter: FC = () => {
+  const { isAuth } = useAppSelector(
+    (state) => state.authReducer
+  );
   return isAuth ? (
     <Routes>
       {privateRoutes.map((route) => {

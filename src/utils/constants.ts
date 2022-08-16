@@ -20,7 +20,15 @@ export const STYLE_HEADER_FORM: SxProps = {
   borderBottom: '1px solid lightgrey',
 };
 
+export const STYLE_USER_CARD: SxProps = {
+  width: '350px',
+  padding: '15px',
+  borderRadius: '15px',
+  boxSizing: 'border-box',
+  boxShadow: BOX_SHADOW_CARD,
+};
+
 export const API_REGISTER_ROUTE: string = '/register/';
 export const API_AUTH_ROUTE: string = '/login/';
-
-export const JWT: string = 'jwt' 
+export const API_ABOUT_ROUTE: string = '/about/';
+export const JWT: string = 'jwt';

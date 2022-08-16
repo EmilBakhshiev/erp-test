@@ -1,9 +1,19 @@
-export interface IFormAuthValues {
-  username: string;
-  password: string;
+import { Status } from "./StatusEnum";
+
+
+
+export interface IUserState {
+  user: IUserInfo;
+  status: Status;
 }
 
-export interface UserResponse {
-  token: string;
-  error: String;
+export interface IUserInfo {
+  id: number;
+  username: string;
+  avatar: string;
+  about: string | null;
 }
+
+export interface IUserInfoResponse {
+    data: IUserInfo
+  }
